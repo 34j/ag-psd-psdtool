@@ -1,6 +1,6 @@
 {
   "name": "ag-psd-psdtool",
-  "version": "0.0.0-development",
+  "version": "1.0.0",
   "description": "Export PSDTool(kit)-compatible PSD files with options changed using ag-psd",
   "main": "./lib/index.js",
   "files": [
