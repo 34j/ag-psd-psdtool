@@ -1,0 +1,88 @@
+{
+  "name": "create-minimal-package",
+  "type": "commonjs",
+  "version": "1.4.0",
+  "description": "Minimalistic npm package template with 📦🚀semantic-release + Commitizen, CodeCov, Renovate, pre-commit + EsLint (✗🐶Husky + Lint Staged), ⚡️Vitest (✗👢Jest), 📖TypeDoc + Github Pages support. Note that this is a generated sample package.",
+  "author": {
+    "name": "34j"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/34j/create-minimal-package",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/34j/create-minimal-package.git"
+  },
+  "bugs": {
+    "url": "https://github.com/34j/create-minimal-package/issues"
+  },
+  "keywords": [
+    "boilerplate",
+    "template",
+    "typescript",
+    "vitest",
+    "pre-commit",
+    "semantic-release",
+    "typedoc"
+  ],
+  "main": "./dist/index.js",
+  "files": [
+    "dist/**/*"
+  ],
+  "scripts": {
+    "build:watch": "tsc --watch --project tsconfig.json",
+    "preinstall": "npx only-allow pnpm",
+    "build": "tsc --project tsconfig.json",
+    "lint": "eslint --fix",
+    "typedoc": "typedoc",
+    "typedoc:watch": "typedoc --watch",
+    "test:watch": "vitest --watch --coverage --coverage.include=src",
+    "test": "vitest --coverage --coverage.include=src",
+    "watch": "npm-run-all --race --parallel *:watch",
+    "update": "npm-check-updates -u"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "4.11.0",
+    "@semantic-release/changelog": "6.0.3",
+    "@semantic-release/git": "10.0.1",
+    "@tsconfig/strictest": "2.0.5",
+    "@types/node": "22.13.14",
+    "@typescript-eslint/eslint-plugin": "8.29.0",
+    "@vitest/browser": "3.1.1",
+    "@vitest/coverage-istanbul": "^3.1.1",
+    "eslint": "9.23.0",
+    "globals": "16.0.0",
+    "npm-check-updates": "17.1.16",
+    "npm-run-all2": "7.0.2",
+    "playwright": "1.51.1",
+    "semantic-release": "24.2.3",
+    "typedoc": "0.28.1",
+    "typescript": "5.8.2",
+    "vitest": "3.1.1"
+  },
+  "typedocOptions": {
+    "entryPoints": [
+      "./src"
+    ],
+    "tsconfig": "./tsconfig.json"
+  },
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "CHANGELOG.md",
+            "README.md",
+            "package.json",
+            "package-lock.json"
+          ]
+        }
+      ],
+      "@semantic-release/github"
+    ]
+  }
+}
