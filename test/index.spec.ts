@@ -1,6 +1,7 @@
 import { readPsd } from 'ag-psd'
 import { isNode } from 'browser-or-node'
 import { describe, it } from 'vitest'
+import { pdfToSchema } from '../src/index'
 
 describe('index', () => {
   describe('psdToTypes', () => {
@@ -12,7 +13,8 @@ describe('index', () => {
         require('ag-psd/initialize-canvas')
       }
       const psd = readPsd(buffer)
-      console.warn(psd)
+      const schema = pdfToSchema(psd)
+      console.warn(JSON.stringify(schema, null, 2))
     })
   })
 })
