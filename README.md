@@ -10,8 +10,6 @@
 
 ---
 
-Export PSDTool(kit)-compatible PSD files with options (visible states) changed using ag-psd 
-
 **Documentation**: [https://34j.github.io/ag-psd-psdtool/](https://34j.github.io/ag-psd-psdtool/)
 
 **NPM Package**: [https://www.npmjs.com/package/ag-psd-psdtool](https://www.npmjs.com/package/ag-psd-psdtool)
