@@ -19,8 +19,8 @@ function extractName(name: string): string {
 export function renderPsd(psd: Psd, data: any, schema: any = null): HTMLCanvasElement {
   schema = schema || pdfToSchema(psd)
   const queue: Layer[] = [psd]
-  const path: Layer[] = []
-  const canvas: HTMLLinkElement[] = []
+  const ancestors: Layer[] = []
+  const canvasList: HTMLLinkElement[] = []
   while (queue.length) {
     const node = queue.pop()
     // should not happen
@@ -30,13 +30,50 @@ export function renderPsd(psd: Psd, data: any, schema: any = null): HTMLCanvasEl
 
     // relative path
     if (node !== psd) {
-      while (path.length && !path.at(-1)?.children?.includes(node)) {
-        path.pop()
+      while (ancestors.length && !ancestors.at(-1)?.children?.includes(node)) {
+        ancestors.pop()
       }
-      path.push(node)
+      ancestors.push(node)
     }
-    const currentPath = path.map((layer) => { extractName(layer.name || '') }).join('/')
+    const currentPath = ancestors.map(layer => extractName(layer.name || '')).join('/')
+
+    // add children to queue
+    node.children?.forEach((child) => {
+      queue.push(child)
+    })
+
+    const visible = data[currentPath] || node.name?.startsWith('!') || node.name?.startsWith('*')
+    if (!visible) {
+      continue
+    }
+    if (node.children?.length) {
+      if (schema.properties[currentPath]?.enum) {
+        const visibleChild = node.children.find(child => extractName(child.name || '') === data[currentPath])
+        if (visibleChild) {
+          queue.push(visibleChild)
+          ancestors.push(visibleChild)
+        }
+      }
+      for (const child of node.children) {
+        if (child.name?.startsWith('*')) {
+          continue
+        }
+        queue.push(child)
+      }
+    }
+    else {
+      canvasList.push(node.canvas)
+    }
   }
+
+  // merge all canvases
+  const canvas = psd.canvas
+  const ctx = canvas.getContext('2d')
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
+  for (const c of canvasList) {
+    ctx.drawImage(c, 0, 0)
+  }
+  return canvas
 }
 
 export function pdfToSchema(psd: Psd): any {
@@ -45,7 +82,7 @@ export function pdfToSchema(psd: Psd): any {
     properties: {},
   }
   const queue: Layer[] = [psd]
-  const path: Layer[] = []
+  const ancestors: Layer[] = []
   while (queue.length) {
     const node = queue.pop()
     // should not happen
@@ -55,17 +92,12 @@ export function pdfToSchema(psd: Psd): any {
 
     // relative path
     if (node !== psd) {
-      while (path.length && !path.at(-1)?.children?.includes(node)) {
-        path.pop()
+      while (ancestors.length && !ancestors.at(-1)?.children?.includes(node)) {
+        ancestors.pop()
       }
-      path.push(node)
+      ancestors.push(node)
     }
-    const currentPath = path.map(layer => extractName(layer.name || '')).join('/')
-
-    // add children to queue
-    node.children?.forEach((child) => {
-      queue.push(child)
-    })
+    const currentPath = ancestors.map(layer => extractName(layer.name || '')).join('/')
 
     // children is option
     const enumOptions = node.children?.map(child => child.name).filter(name => name?.startsWith('*')).map(name => extractName(name || ''))
@@ -76,7 +108,6 @@ export function pdfToSchema(psd: Psd): any {
         nullable: !node.name?.startsWith('!'),
       }
     }
-
     // !: force visible
     else if (node.name?.startsWith('!')) {
       ;
@@ -90,6 +121,11 @@ export function pdfToSchema(psd: Psd): any {
         type: 'boolean',
       }
     }
+
+    // add children to queue
+    node.children?.forEach((child) => {
+      queue.push(child)
+    })
   }
   return schema
 }
