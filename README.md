@@ -49,9 +49,9 @@ Zero-knowledge ***minimalistic*** template for creating a new npm package.
 1. Click the "Use this template" button.
 2. Replace `GITHUB_USER` and `REPO_NAME` using `sed`:
   ```bash
-  GITHUB_USER="johnsmith"
-  REPO_NAME="my-cool-package"
-  sed -i.tmp "s/\([^@]\)34j/\1$GITHUB_USER/g; s/create-minimal-package\|my-package-name/$REPO_NAME/g; package.json package-lock.json src/index.ts
+  GITHUB_USER="34j"
+  REPO_NAME="ag-psd-psdtool"
+  sed -i.tmp "s/\([^@]\)34j/\1$GITHUB_USER/g; s/create-minimal-package\|my-package-name/$REPO_NAME/g;" package.json package-lock.json src/index.ts
   sed -i.tmp 's/"version": "[0-9.]*"/"version": "0.0.0"/' package.json
   rm *.tmp
   rm CHANGELOG.md
