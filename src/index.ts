@@ -2,16 +2,45 @@
   @module
  */
 import type { Layer, Psd } from 'ag-psd'
+
+function extractName(name: string): string {
+  if (name.startsWith('!')) {
+    return name.slice(1)
+  }
+  else if (name.startsWith('*')) {
+    return name.slice(1)
+  }
+  return name
+}
+
 /**
  * Lorem ipsum.
  */
-export function renderPsd(psd: Psd): HTMLCanvasElement {
-  const canvas = psd.children[0].canvas
-  return canvas
+export function renderPsd(psd: Psd, data: any, schema: any = null): HTMLCanvasElement {
+  schema = schema || pdfToSchema(psd)
+  const queue: Layer[] = [psd]
+  const path: Layer[] = []
+  const canvas: HTMLLinkElement[] = []
+  while (queue.length) {
+    const node = queue.pop()
+    // should not happen
+    if (!node) {
+      break
+    }
+
+    // relative path
+    if (node !== psd) {
+      while (path.length && !path.at(-1)?.children?.includes(node)) {
+        path.pop()
+      }
+      path.push(node)
+    }
+    const currentPath = path.map((layer) => { extractName(layer.name || '') }).join('/')
+  }
 }
 
-export function pdfToSchema(psd: Psd): Record<string, string> {
-  const schema = {
+export function pdfToSchema(psd: Psd): any {
+  const schema: any = {
     type: 'object',
     properties: {},
   }
@@ -19,20 +48,27 @@ export function pdfToSchema(psd: Psd): Record<string, string> {
   const path: Layer[] = []
   while (queue.length) {
     const node = queue.pop()
+    // should not happen
     if (!node) {
       break
     }
+
+    // relative path
     if (node !== psd) {
-      while (path.length && !path[path.length - 1]?.children?.includes(node)) {
+      while (path.length && !path.at(-1)?.children?.includes(node)) {
         path.pop()
       }
       path.push(node)
     }
-    const currentPath = path.map(layer => layer.name).join('/')
+    const currentPath = path.map(layer => extractName(layer.name || '')).join('/')
+
+    // add children to queue
     node.children?.forEach((child) => {
       queue.push(child)
     })
-    const enumOptions = node.children?.map(child => child.name).filter(name => name?.startsWith('*'))
+
+    // children is option
+    const enumOptions = node.children?.map(child => child.name).filter(name => name?.startsWith('*')).map(name => extractName(name || ''))
     if (enumOptions?.length) {
       schema.properties[currentPath] = {
         type: 'string',
@@ -40,11 +76,12 @@ export function pdfToSchema(psd: Psd): Record<string, string> {
         nullable: !node.name?.startsWith('!'),
       }
     }
-    // force visible
+
+    // !: force visible
     else if (node.name?.startsWith('!')) {
       ;
     }
-    // option
+    // *: option
     else if (node.name?.startsWith('*')) {
       ;
     }
