@@ -17,11 +17,7 @@ export default defineWorkspace([
         bypassCSP: true,
         provider: 'playwright',
         instances: [
-          { browser: 'firefox', launch: {
-            args: [
-              '--disable-web-security',
-            ],
-          } },
+          // { browser: 'firefox' },
           { browser: 'chromium', launch: {
             args: [
               '--disable-web-security',
