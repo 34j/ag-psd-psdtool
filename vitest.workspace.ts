@@ -14,10 +14,24 @@ export default defineWorkspace([
       browser: {
         enabled: true,
         headless: true,
+        bypassCSP: true,
         provider: 'playwright',
         instances: [
-          { browser: 'firefox' },
-          { browser: 'chromium' },
+          { browser: 'firefox',
+            launch: {
+              args: [
+                '--disable-web-security',
+              ]
+            },
+
+          },
+          { browser: 'chromium'
+            launch: {
+              args: [
+                '--disable-web-security',
+              ]
+            },
+ },
         ],
       },
     },
