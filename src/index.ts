@@ -27,9 +27,10 @@ export function renderPsd(psd: Psd, data: any, schema: any = null): HTMLCanvasEl
   }
   const queue: Layer[] = [psd]
   const ancestors: Layer[] = []
-  const canvasList: HTMLLinkElement[] = []
+  const visibleLayers: Layer[] = []
+  // layer.children are ordered from background to foreground
   while (queue.length) {
-    const node = queue.pop()
+    const node = queue.shift()
     // should not happen
     if (!node) {
       break
@@ -44,32 +45,17 @@ export function renderPsd(psd: Psd, data: any, schema: any = null): HTMLCanvasEl
     }
     const currentPath = ancestors.map(layer => extractName(layer.name || '')).join('/')
 
-    // add children to queue
-    node.children?.forEach((child) => {
-      queue.push(child)
-    })
-
-    const visible = data[currentPath] || node.name?.startsWith('!') || node.name?.startsWith('*')
+    const visible = data[currentPath] || node.name?.startsWith('!') || node.name?.startsWith('*') || node === psd
     if (!visible) {
       continue
     }
+
+    // add children to queue
     if (node.children?.length) {
-      if (schema.properties[currentPath]?.enum) {
-        const visibleChild = node.children.find(child => extractName(child.name || '') === data[currentPath])
-        if (visibleChild) {
-          queue.push(visibleChild)
-          ancestors.push(visibleChild)
-        }
-      }
-      for (const child of node.children) {
-        if (child.name?.startsWith('*')) {
-          continue
-        }
-        queue.push(child)
-      }
+      queue.unshift(...node.children.filter(child => !child.name?.startsWith('*') || data[currentPath] === extractName(child.name || '')))
     }
     else {
-      canvasList.push(node.canvas)
+      visibleLayers.push(node)
     }
   }
 
@@ -77,9 +63,9 @@ export function renderPsd(psd: Psd, data: any, schema: any = null): HTMLCanvasEl
   const canvas = psd.canvas
   const ctx = canvas.getContext('2d')
   ctx.clearRect(0, 0, canvas.width, canvas.height)
-  for (const c of canvasList) {
-    ctx.drawImage(c, 0, 0)
-  }
+  visibleLayers.forEach((layer) => {
+    ctx.drawImage(layer.canvas, layer.left, layer.top)
+  })
   return canvas
 }
 
