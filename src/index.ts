@@ -65,7 +65,7 @@ function tagMatchesFlip(tags: Set<Tag>, flipx: bool, flipy: bool): bool {
 /**
  * Lorem ipsum.
  */
-export function renderPsd(psd: Psd, data: any, schema: any = null, flipx: boolean = false, flipy: boolean = false): HTMLCanvasElement {
+export function renderPsd(psd: Psd, data: any, flipx: boolean = false, flipy: boolean = false, schema: any = null): HTMLCanvasElement {
   schema = schema || getSchema(psd)
   const ajv = new Ajv({ useDefaults: true, removeAdditional: true })
   const validate = ajv.compile(schema)

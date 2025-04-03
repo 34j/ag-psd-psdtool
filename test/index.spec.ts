@@ -6,18 +6,18 @@ import { renderPsd } from '../src/index'
 describe('index', () => {
   describe('psdToTypes', () => {
     it('should return a string containing the message', async () => {
-      const request = await fetch('http://127.0.0.1:8080/test.psd')
+      const request = await fetch('http://127.0.0.1:8080/ccchu.psd')
       const buffer = await request.arrayBuffer()
       if (isNode) {
         // eslint-disable-next-line ts/no-require-imports
         require('ag-psd/initialize-canvas')
       }
       const psd = readPsd(buffer)
-      const canvas = renderPsd(psd, { '体/腕/片腕ずつ/右腕': '右腕 ばんざい' }, null, true, false)
+      const canvas = renderPsd(psd, {})
       if (isNode) {
         const { writeFile } = (await import('node:fs')).promises
         const Buffer = (await import('node:buffer')).Buffer
-        await writeFile('test.png', Buffer.from(canvas.toDataURL().split(',')[1], 'base64'))
+        await writeFile('test/assets/ccchuGen.png', Buffer.from(canvas.toDataURL().split(',')[1], 'base64'))
       }
     })
   })
