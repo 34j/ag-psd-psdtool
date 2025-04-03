@@ -3,22 +3,70 @@
  */
 import type { Layer, Psd } from 'ag-psd'
 import Ajv from 'ajv'
+import { countBy } from 'es-toolkit'
 
-function extractName(name: string): string {
+type Tag = 'fixed' | 'option' | 'filpx' | 'filpy' | 'filpxy'
+
+interface PSDToolInfo {
+  tags: Set<Tag>
+  name: string
+}
+
+export function getPSDToolInfo(name: string | undefined): PSDToolInfo {
+  name = name || ''
+  const tags = new Set<Tag>()
   if (name.startsWith('!')) {
-    return name.slice(1)
+    tags.add('fixed')
+    name = name.slice(1)
   }
   else if (name.startsWith('*')) {
-    return name.slice(1)
+    tags.add('option')
+    name = name.slice(1)
   }
-  return name
+  while (true) {
+    if (name.endsWith(':flipx')) {
+      tags.add('filpx')
+      name = name.slice(0, -':flipx'.length)
+    }
+    else if (name.endsWith(':flipy')) {
+      tags.add('filpy')
+      name = name.slice(0, -':flipy'.length)
+    }
+    else if (name.endsWith(':flipxy')) {
+      tags.add('filpxy')
+      name = name.slice(0, -':flipxy'.length)
+    }
+    else {
+      break
+    }
+  }
+  return {
+    tags,
+    name,
+  }
+}
+
+function tagMatchesFlip(tags: Set<Tag>, flipx: bool, flipy: bool): bool {
+  if (tags.has('filpxy') && flipx && flipy) {
+    return true
+  }
+  if (tags.has('filpx') && flipx && !flipy) {
+    return true
+  }
+  if (tags.has('filpy') && !flipx && flipy) {
+    return true
+  }
+  if (!tags.has('filpx') && !tags.has('filpy') && !flipx && !flipy) {
+    return true
+  }
+  return false
 }
 
 /**
  * Lorem ipsum.
  */
-export function renderPsd(psd: Psd, data: any, schema: any = null): HTMLCanvasElement {
-  schema = schema || pdfToSchema(psd)
+export function renderPsd(psd: Psd, data: any, schema: any = null, flipx: bool = false, flipy: bool = false): HTMLCanvasElement {
+  schema = schema || getSchema(psd)
   const ajv = new Ajv({ useDefaults: true, removeAdditional: true })
   const validate = ajv.compile(schema)
   const valid = validate(data)
@@ -36,6 +84,8 @@ export function renderPsd(psd: Psd, data: any, schema: any = null): HTMLCanvasEl
       break
     }
 
+    const info = getPSDToolInfo(node.name)
+
     // relative path
     if (node !== psd) {
       while (ancestors.length && !ancestors.at(-1)?.children?.includes(node)) {
@@ -43,16 +93,18 @@ export function renderPsd(psd: Psd, data: any, schema: any = null): HTMLCanvasEl
       }
       ancestors.push(node)
     }
-    const currentPath = ancestors.map(layer => extractName(layer.name || '')).join('/')
+    const currentPath = ancestors.map(layer => getPSDToolInfo(layer.name).name).join('/')
 
-    const visible = data[currentPath] || node.name?.startsWith('!') || node.name?.startsWith('*') || node === psd
+    const visible = data[currentPath] || info.tags.has('fixed') || !info.tags.has('visible') || node === psd
     if (!visible) {
       continue
     }
 
     // add children to queue
     if (node.children?.length) {
-      queue.unshift(...node.children.filter(child => !child.name?.startsWith('*') || data[currentPath] === extractName(child.name || '')))
+      const sameNameCount = countBy(node.children.filter(child => getPSDToolInfo(child.name).name), child => child.name || '')
+      const duplicated = new Set(Object.entries(sameNameCount).filter(([_, count]) => count > 1).map(([name]) => name))
+      queue.unshift(...node.children.map(child => ({ child, info: getPSDToolInfo(child.name) })).filter(s => !s.info.tags.has('option') || data[currentPath] === s.info.name).filter(s => !duplicated.has(s.info.name) || tagMatchesFlip(s.info.tags, flipx, flipy)).map(s => s.child))
     }
     else {
       visibleLayers.push(node)
@@ -69,9 +121,10 @@ export function renderPsd(psd: Psd, data: any, schema: any = null): HTMLCanvasEl
   return canvas
 }
 
-export function pdfToSchema(psd: Psd): any {
+export function getSchema(psd: Psd): any {
   const schema: any = {
     type: 'object',
+    title: psd.name,
     properties: {},
   }
   const queue: Layer[] = [psd]
@@ -83,6 +136,8 @@ export function pdfToSchema(psd: Psd): any {
       break
     }
 
+    const info = getPSDToolInfo(node.name)
+
     // relative path
     if (node !== psd) {
       while (ancestors.length && !ancestors.at(-1)?.children?.includes(node)) {
@@ -90,16 +145,18 @@ export function pdfToSchema(psd: Psd): any {
       }
       ancestors.push(node)
     }
-    const currentPath = ancestors.map(layer => extractName(layer.name || '')).join('/')
+    const currentPath = ancestors.map(layer => getPSDToolInfo(layer.name).name).join('/')
 
     // children is option
-    const enumOptions = node.children?.map(child => child.name).filter(name => name?.startsWith('*')).map(name => extractName(name || ''))
-    if (enumOptions?.length) {
+    // remove :flipx, :flipy, :flipxy
+    const enumOptions = [...new Set(node.children?.map(child => getPSDToolInfo(child.name)).filter(info => info.tags.has('option')).map(info => info.name))]
+    if (enumOptions.length) {
       schema.properties[currentPath] = {
         type: 'string',
         enum: enumOptions,
-        default: node.children?.filter(child => child.hidden === false).map(child => extractName(child.name || '')).at(0),
-        nullable: !node.name?.startsWith('!'),
+        // set first visible child as default
+        default: node.children?.filter(child => child.hidden === false).map(child => getPSDToolInfo(child.name).name).at(0),
+        nullable: !info.tags.has('fixed'),
       }
     }
     // top level
@@ -107,11 +164,11 @@ export function pdfToSchema(psd: Psd): any {
       ;
     }
     // !: force visible
-    else if (node.name?.startsWith('!')) {
+    else if (info.tags.has('fixed')) {
       ;
     }
     // *: option
-    else if (node.name?.startsWith('*')) {
+    else if (info.tags.has('option')) {
       ;
     }
     else {

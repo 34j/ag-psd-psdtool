@@ -13,7 +13,7 @@ describe('index', () => {
         require('ag-psd/initialize-canvas')
       }
       const psd = readPsd(buffer)
-      const canvas = renderPsd(psd, {})
+      const canvas = renderPsd(psd, { '体/腕/片腕ずつ/右腕': '右腕 ばんざい' })
       if (isNode) {
         const { writeFile } = (await import('node:fs')).promises
         const Buffer = (await import('node:buffer')).Buffer
