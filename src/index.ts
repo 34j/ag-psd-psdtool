@@ -105,8 +105,13 @@ export function pdfToSchema(psd: Psd): any {
       schema.properties[currentPath] = {
         type: 'string',
         enum: enumOptions,
+        default: node.children?.filter(child => child.hidden === false).map(child => extractName(child.name || '')).at(0),
         nullable: !node.name?.startsWith('!'),
       }
+    }
+    // top level
+    else if (node === psd) {
+      ;
     }
     // !: force visible
     else if (node.name?.startsWith('!')) {
@@ -119,6 +124,7 @@ export function pdfToSchema(psd: Psd): any {
     else {
       schema.properties[currentPath] = {
         type: 'boolean',
+        default: node.hidden === false,
       }
     }
 
