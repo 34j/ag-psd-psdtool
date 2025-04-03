@@ -118,8 +118,14 @@ export function renderPsd(psd: Psd, data: any, schema: any = null, flipx: boolea
   // merge all canvases
   const canvas = psd.canvas
   const ctx = canvas.getContext('2d')
+  // clear canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height)
+  // flip canvas
+  ctx.scale(flipx ? -1 : 1, flipy ? -1 : 1)
+  ctx.translate(flipx ? -canvas.width : 0, flipy ? -canvas.height : 0)
+  // draw all visible layers
   visibleLayers.forEach((layer) => {
+    // ctx.globalCompositeOperation = 'source-over'
     ctx.drawImage(layer.canvas, layer.left, layer.top)
   })
   return canvas
