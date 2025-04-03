@@ -1,8 +1,7 @@
 import { readPsd } from 'ag-psd'
-import { Ajv } from 'ajv'
 import { isNode } from 'browser-or-node'
 import { describe, it } from 'vitest'
-import { pdfToSchema } from '../src/index'
+import { renderPsd } from '../src/index'
 
 describe('index', () => {
   describe('psdToTypes', () => {
@@ -14,10 +13,12 @@ describe('index', () => {
         require('ag-psd/initialize-canvas')
       }
       const psd = readPsd(buffer)
-      const schema = pdfToSchema(psd)
-      const ajv = new Ajv()
-      ajv.compile(schema)
-      console.warn(JSON.stringify(schema, null, 2))
+      const canvas = renderPsd(psd, {})
+      if (isNode) {
+        const { writeFile } = (await import('node:fs')).promises
+        const Buffer = (await import('node:buffer')).Buffer
+        await writeFile('test.png', Buffer.from(canvas.toDataURL().split(',')[1], 'base64'))
+      }
     })
   })
 })

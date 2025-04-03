@@ -2,6 +2,7 @@
   @module
  */
 import type { Layer, Psd } from 'ag-psd'
+import Ajv from 'ajv'
 
 function extractName(name: string): string {
   if (name.startsWith('!')) {
@@ -18,6 +19,12 @@ function extractName(name: string): string {
  */
 export function renderPsd(psd: Psd, data: any, schema: any = null): HTMLCanvasElement {
   schema = schema || pdfToSchema(psd)
+  const ajv = new Ajv({ useDefaults: true, removeAdditional: true })
+  const validate = ajv.compile(schema)
+  const valid = validate(data)
+  if (!valid) {
+    throw new Error('data does not match schema')
+  }
   const queue: Layer[] = [psd]
   const ancestors: Layer[] = []
   const canvasList: HTMLLinkElement[] = []
