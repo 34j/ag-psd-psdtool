@@ -65,7 +65,7 @@ function tagMatchesFlip(tags: Set<Tag>, flipx: bool, flipy: bool): bool {
 /**
  * Lorem ipsum.
  */
-export function renderPsd(psd: Psd, data: any, schema: any = null, flipx: bool = false, flipy: bool = false): HTMLCanvasElement {
+export function renderPsd(psd: Psd, data: any, schema: any = null, flipx: boolean = false, flipy: boolean = false): HTMLCanvasElement {
   schema = schema || getSchema(psd)
   const ajv = new Ajv({ useDefaults: true, removeAdditional: true })
   const validate = ajv.compile(schema)
@@ -79,9 +79,8 @@ export function renderPsd(psd: Psd, data: any, schema: any = null, flipx: bool =
   // layer.children are ordered from background to foreground
   while (queue.length) {
     const node = queue.shift()
-    // should not happen
     if (!node) {
-      break
+      throw new Error('AssertionError: node is null')
     }
 
     const info = getPSDToolInfo(node.name)
@@ -95,16 +94,21 @@ export function renderPsd(psd: Psd, data: any, schema: any = null, flipx: bool =
     }
     const currentPath = ancestors.map(layer => getPSDToolInfo(layer.name).name).join('/')
 
-    const visible = data[currentPath] || info.tags.has('fixed') || !info.tags.has('visible') || node === psd
+    const visible = data[currentPath] === true || info.tags.has('fixed') || info.tags.has('option') || node === psd
     if (!visible) {
       continue
     }
 
     // add children to queue
     if (node.children?.length) {
-      const sameNameCount = countBy(node.children.filter(child => getPSDToolInfo(child.name).name), child => child.name || '')
+      const sameNameCount = countBy(node.children, child => getPSDToolInfo(child.name).name)
       const duplicated = new Set(Object.entries(sameNameCount).filter(([_, count]) => count > 1).map(([name]) => name))
-      queue.unshift(...node.children.map(child => ({ child, info: getPSDToolInfo(child.name) })).filter(s => !s.info.tags.has('option') || data[currentPath] === s.info.name).filter(s => !duplicated.has(s.info.name) || tagMatchesFlip(s.info.tags, flipx, flipy)).map(s => s.child))
+      queue.unshift(...node.children
+        .map(child => ({ child, info: getPSDToolInfo(child.name) }))
+        .filter(s => !s.info.tags.has('option') || data[currentPath] === s.info.name)
+        .filter(s => !duplicated.has(s.info.name) || tagMatchesFlip(s.info.tags, flipx, flipy))
+        .map(s => s.child),
+      )
     }
     else {
       visibleLayers.push(node)
@@ -131,9 +135,8 @@ export function getSchema(psd: Psd): any {
   const ancestors: Layer[] = []
   while (queue.length) {
     const node = queue.pop()
-    // should not happen
     if (!node) {
-      break
+      throw new Error('AssertionError: node is null')
     }
 
     const info = getPSDToolInfo(node.name)
@@ -171,6 +174,7 @@ export function getSchema(psd: Psd): any {
     else if (info.tags.has('option')) {
       ;
     }
+    // boolean option
     else {
       schema.properties[currentPath] = {
         type: 'boolean',
