@@ -11,20 +11,18 @@ describe('index', async () => {
     require('ag-psd/initialize-canvas')
   }
   const psd = readPsd(buffer)
-
-  describe.each([
-    { flipx: false, flipy: false },
-    { flipx: true, flipy: false },
-    { flipx: false, flipy: true },
-    { flipx: true, flipy: true },
-  ])('renderPsd', (options) => {
-    it('should able to write files', async () => {
-      const canvas = renderPsd(psd, {}, options)
-      if (isNode) {
-        const { writeFile } = (await import('node:fs')).promises
-        const Buffer = (await import('node:buffer')).Buffer
-        await writeFile('test/assets/ccchuGen.png', Buffer.from(canvas.toDataURL().split(',')[1], 'base64'))
-      }
+  describe.for([{}, { right_eye: 'wink' }, { logo: null }])('data: %s', (data) => {
+    describe.for([false, true])('flipy: %s', (flipy) => {
+      describe.for([false, true])('flipx: %s', (flipx) => {
+        it('should be able to write files', async () => {
+          const canvas = renderPsd(psd, data, { flipx, flipy })
+          if (isNode) {
+            const { writeFile } = (await import('node:fs')).promises
+            const Buffer = (await import('node:buffer')).Buffer
+            await writeFile('test/assets/ccchuGen.png', Buffer.from(canvas.toDataURL().split(',')[1], 'base64'))
+          }
+        })
+      })
     })
   })
 })

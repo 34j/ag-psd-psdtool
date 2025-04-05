@@ -133,7 +133,7 @@ export function renderPsd(psd: Psd, data: Record<string, any>, options?: RenderO
   const validate = ajv.compile(schema)
   const valid = validate(data)
   if (!valid) {
-    throw new Error('data does not match schema')
+    throw new Error(`data does not match schema\n${validate.errors}\n${JSON.stringify(data, null, 2)}`)
   }
   const queue: Layer[] = [psd]
   const ancestors: Layer[] = []

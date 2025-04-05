@@ -121,3 +121,6 @@ docs/
 /CHANGELOG.md linguist-generated
 /README.md linguist-generated
 __screenshots__
+# krita
+*~
+*.kra-autosave.kra
