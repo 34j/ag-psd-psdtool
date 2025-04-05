@@ -18,7 +18,7 @@
 
 ---
 
-Export PSDTool(kit)-compatible PSD files with options (visible states) changed using ag-psd.
+Export [PSDTool](https://oov.github.io/psdtool/)([kit](https://oov.github.io/aviutl_psdtoolkit/index.html))-compatible PSD files with options (visible states) changed using [ag-psd](https://github.com/Agamnentzar/ag-psd).
 
 ## Installation
 
@@ -28,11 +28,23 @@ npm install ag-psd-psdtool
 
 ## Usage
 
-```ts
-import { myPackage } from 'ag-psd-psdtool'
+The code below works on both Node.js and browser environments thanks to the `fetch` API.
 
-myPackage('hello')
-// => 'hello from my package'
+```ts
+import { readPsd } from 'ag-psd'
+import { getSchema, renderPsd } from 'ag-psd-psdtool'
+
+// Fetch a PSD file
+const url = 'https://raw.githubusercontent.com/34j/ag-psd-psdtool/refs/heads/feat/add-main-feat/test/assets/ccchu.psd'
+const request = await fetch(url)
+const psd = await request.arrayBuffer()
+
+// 1. Get the schema
+const schema = getSchema(psd)
+console.log(schema)
+
+// 2 . Change the visible states
+const canvas = renderPsd(psd, {}, { flipx: true })
 ```
 
 [build-img]:https://github.com/34j/ag-psd-psdtool/actions/workflows/release.yml/badge.svg
