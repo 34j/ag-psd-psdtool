@@ -10,53 +10,69 @@
       system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
+        lib = pkgs.lib;
+        libPath = lib.makeLibraryPath (
+          with pkgs;
+          [
+            openssl
+            systemd
+            glib
+            cups
+            nss
+            alsa-lib
+            dbus
+            at-spi2-core
+            libdrm
+            expat
+            xorg.libX11
+            xorg.libXcomposite
+            xorg.libXdamage
+            xorg.libXext
+            xorg.libXfixes
+            xorg.libXrandr
+            xorg.libxcb
+            mesa
+            libxkbcommon
+            pango
+            cairo
+            nspr
+            libgbm
+          ]
+        );
+        wrapPrefix = if (!pkgs.stdenv.isDarwin) then "LD_LIBRARY_PATH" else "DYLD_LIBRARY_PATH";
+        patchedpnpm = (
+          pkgs.symlinkJoin {
+            name = "pnpm";
+            paths = [ pkgs.pnpm ];
+            buildInputs = [ pkgs.makeWrapper ];
+            postBuild = ''
+              wrapProgram "$out/bin/pnpm" --prefix ${wrapPrefix} : "${libPath}"
+            '';
+          }
+        );
+        patchednode = (
+          pkgs.symlinkJoin {
+            name = "node";
+            paths = [ pkgs.nodejs ];
+            buildInputs = [ pkgs.makeWrapper ];
+            postBuild = ''
+              wrapProgram "$out/bin/node" --prefix ${wrapPrefix} : "${libPath}"
+            '';
+          }
+        );
       in
       {
-        devShells.default =
-          (pkgs.buildFHSEnv {
-            name = "playwright";
-            targetPkgs =
-              pkgs:
-              [
-                # playwright (firefox) dependencies
-                (pkgs.runCommand "steamrun-lib" { }
-                  "mkdir $out; ln -s ${pkgs.steam-run-free.fhsenv}/usr/lib64 $out/lib"
-                )
-              ]
-              ++ (with pkgs; [
-                # playwright (chromium) dependencies
-                # https://zenn.dev/link/comments/d456595abd7aea
-                openssl
-                systemd
-                glib
-                cups
-                nss
-                alsa-lib
-                dbus
-                at-spi2-core
-                libdrm
-                expat
-                xorg.libX11
-                xorg.libXcomposite
-                xorg.libXdamage
-                xorg.libXext
-                xorg.libXfixes
-                xorg.libXrandr
-                xorg.libxcb
-                mesa
-                libxkbcommon
-                pango
-                cairo
-                nspr
-                libgbm
-              ])
-              ++ (with pkgs; [
-                # project dependencies
-                pnpm
-                nodejs
-                pre-commit
-              ]);
-          }).env;
+        devShells.default = pkgs.mkShell {
+          packages =
+            (with pkgs; [
+              # project dependencies
+              pre-commit
+            ])
+            ++ [
+              patchednode
+              patchedpnpm
+            ];
+        };
       }
     );
 }
