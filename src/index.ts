@@ -7,11 +7,35 @@ import { countBy } from 'es-toolkit'
 
 type Tag = 'fixed' | 'option' | 'filpx' | 'filpy' | 'filpxy'
 
+/**
+ * The PSDTool extension info which can be generated from the layer name.
+ */
 interface PSDToolInfo {
+  /**
+   * The tags of the layer.
+   * !: fixed
+   * : option
+   * :flipx: flipx
+   * :flipy: flipy
+   * :flipxy: flipxy
+   * @example
+   * !*layer:flipx:flipy => fixed, filpx, filpy
+   */
   tags: Set<Tag>
+  /**
+   * The name of the layer without the tags.
+   * @example
+   * !*layer:flipx:flipy => *layer
+   */
   name: string
 }
 
+/**
+ * Get the PSDToolInfo from the name.
+ * @param name The name of the layer.
+ * @returns The PSDToolInfo.
+ * @throws {Error} If the name is not a string.
+ */
 export function getPSDToolInfo(name: string | undefined): PSDToolInfo {
   name = name || ''
   const tags = new Set<Tag>()
@@ -46,6 +70,13 @@ export function getPSDToolInfo(name: string | undefined): PSDToolInfo {
   }
 }
 
+/**
+ * Whether the tags match the flipx and flipy options.
+ * @param tags The tags to check.
+ * @param flipx Whether to flip the image horizontally.
+ * @param flipy Whether to flip the image vertically.
+ * @returns Whether the tags match the flipx and flipy options.
+ */
 function tagMatchesFlip(tags: Set<Tag>, flipx: bool, flipy: bool): bool {
   if (tags.has('filpxy') && flipx && flipy) {
     return true
@@ -63,10 +94,41 @@ function tagMatchesFlip(tags: Set<Tag>, flipx: bool, flipy: bool): bool {
 }
 
 /**
- * Lorem ipsum.
+ * The options for rendering a PSD file.
  */
-export function renderPsd(psd: Psd, data: any, flipx: boolean = false, flipy: boolean = false, schema: any = null): HTMLCanvasElement {
-  schema = schema || getSchema(psd)
+export interface RenderOptions {
+  /**
+   * Whether to flip the image horizontally.
+   */
+  flipx?: boolean
+  /**
+   * Whether to flip the image vertically.
+   */
+  flipy?: boolean
+  /**
+   * The schema to use for validation.
+   */
+  schema?: any
+  /**
+   * The canvas to use for rendering.
+   * If not provided, psd.canvas will be used.
+   */
+  canvas?: HTMLCanvasElement | null
+}
+
+/**
+ * Renders a PSD file to a canvas.
+ * @param psd The PSD file to render.
+ * @param data The data to use for rendering.
+ * @param options The options for rendering.
+ * @returns The rendered canvas.
+ * @throws {Error} If the data does not match the schema.
+ */
+export function renderPsd(psd: Psd, data: any, options?: RenderOptions): HTMLCanvasElement {
+  const flipx = options?.flipx || false
+  const flipy = options?.flipy || false
+  const schema = options?.schema || getSchema(psd)
+  const canvas = options?.canvas || psd.canvas
   const ajv = new Ajv({ useDefaults: true, removeAdditional: true })
   const validate = ajv.compile(schema)
   const valid = validate(data)
@@ -116,9 +178,10 @@ export function renderPsd(psd: Psd, data: any, flipx: boolean = false, flipy: bo
   }
 
   // merge all canvases
-  const canvas = psd.canvas
   const ctx = canvas.getContext('2d')
   // clear canvas
+  ctx.canvas.width = psd.width
+  ctx.canvas.height = psd.height
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   // flip canvas
   ctx.scale(flipx ? -1 : 1, flipy ? -1 : 1)

@@ -5,7 +5,7 @@ import { renderPsd } from '../src/index'
 
 describe('index', () => {
   describe('psdToTypes', () => {
-    it('should return a string containing the message', async () => {
+    it('should able to write files', async () => {
       const request = await fetch('http://127.0.0.1:8080/ccchu.psd')
       const buffer = await request.arrayBuffer()
       if (isNode) {
