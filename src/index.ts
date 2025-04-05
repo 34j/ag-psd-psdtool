@@ -77,7 +77,7 @@ export function getPSDToolInfo(name: string | undefined): PSDToolInfo {
  * @param flipy Whether to flip the image vertically.
  * @returns Whether the tags match the flipx and flipy options.
  */
-function tagMatchesFlip(tags: Set<Tag>, flipx: bool, flipy: bool): bool {
+function tagMatchesFlip(tags: Set<Tag>, flipx: boolean, flipy: boolean): boolean {
   if (tags.has('filpxy') && flipx && flipy) {
     return true
   }
@@ -113,7 +113,7 @@ export interface RenderOptions {
    * The canvas to use for rendering.
    * If not provided, psd.canvas will be used.
    */
-  canvas?: HTMLCanvasElement | null
+  canvas?: any | null
 }
 
 /**
@@ -124,7 +124,7 @@ export interface RenderOptions {
  * @returns The rendered canvas.
  * @throws {Error} If the data does not match the schema.
  */
-export function renderPsd(psd: Psd, data: any, options?: RenderOptions): HTMLCanvasElement {
+export function renderPsd(psd: Psd, data: Record<string, any>, options?: RenderOptions): any {
   const flipx = options?.flipx || false
   const flipy = options?.flipy || false
   const schema = options?.schema || getSchema(psd)
@@ -194,7 +194,12 @@ export function renderPsd(psd: Psd, data: any, options?: RenderOptions): HTMLCan
   return canvas
 }
 
-export function getSchema(psd: Psd): any {
+/**
+ * Get the schema for the PSD file.
+ * @param psd The PSD file to get the schema for.
+ * @returns The schema for the PSD file.
+ */
+export function getSchema(psd: Psd): Record<string, any> {
   const schema: any = {
     type: 'object',
     title: psd.name,
