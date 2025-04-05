@@ -124,7 +124,7 @@ export function renderPsd(psd: Psd, data: any, flipx: boolean = false, flipy: bo
   ctx.scale(flipx ? -1 : 1, flipy ? -1 : 1)
   ctx.translate(flipx ? -canvas.width : 0, flipy ? -canvas.height : 0)
   // draw all visible layers
-  visibleLayers.forEach((layer) => {
+  visibleLayers.filter(layer => layer.canvas).forEach((layer) => {
     // ctx.globalCompositeOperation = 'source-over'
     ctx.drawImage(layer.canvas, layer.left, layer.top)
   })
@@ -155,7 +155,6 @@ export function getSchema(psd: Psd): any {
       ancestors.push(node)
     }
     const currentPath = ancestors.map(layer => getPSDToolInfo(layer.name).name).join('/')
-
     // children is option
     // remove :flipx, :flipy, :flipxy
     const enumOptions = [...new Set(node.children?.map(child => getPSDToolInfo(child.name)).filter(info => info.tags.has('option')).map(info => info.name))]
