@@ -38,7 +38,7 @@
     "host": "http-server test/assets",
     "test:watch": "vitest --watch --coverage --coverage.include=src",
     "test:vitest": "vitest --coverage --coverage.include=src",
-    "test": "npm-run-all --parallel host test:vitest",
+    "test": "npm-run-all --parallel --race host test:vitest",
     "watch": "npm-run-all --parallel *:watch",
     "update": "npm-check-updates -u"
   },
