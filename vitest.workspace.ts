@@ -16,8 +16,15 @@ export default defineWorkspace([
         headless: true,
         provider: 'playwright',
         instances: [
-          { browser: 'firefox' },
-          { browser: 'chromium' },
+          // { browser: 'firefox' },
+          {
+            browser: 'chromium',
+            launch: {
+              args: [
+                '--disable-web-security',
+              ],
+            },
+          },
         ],
       },
     },
