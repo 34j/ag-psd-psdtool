@@ -87,7 +87,7 @@ function tagMatchesFlip(tags: Set<Tag>, flipx: boolean, flipy: boolean): boolean
   if (tags.has('filpy') && !flipx && flipy) {
     return true
   }
-  if (!tags.has('filpx') && !tags.has('filpy') && !flipx && !flipy) {
+  if (!tags.has('filpxy') && !tags.has('filpx') && !tags.has('filpy') && !flipx && !flipy) {
     return true
   }
   return false
@@ -129,7 +129,7 @@ export function renderPsd(psd: Psd, data: Record<string, any>, options?: RenderO
   const flipy = options?.flipy || false
   const schema = options?.schema || getSchema(psd)
   const canvas = options?.canvas || psd.canvas
-  const ajv = new Ajv({ useDefaults: true, removeAdditional: true })
+  const ajv = new Ajv({ useDefaults: true, removeAdditional: true, allowUnionTypes: true })
   const validate = ajv.compile(schema)
   const valid = validate(data)
   if (!valid) {
@@ -147,6 +147,7 @@ export function renderPsd(psd: Psd, data: Record<string, any>, options?: RenderO
   while (queue.length) {
     const node = queue.shift()
     if (!node) {
+      /* v8 ignore next 2 */
       throw new Error('AssertionError: node is null')
     }
 
@@ -161,7 +162,13 @@ export function renderPsd(psd: Psd, data: Record<string, any>, options?: RenderO
     }
     const currentPath = ancestors.map(layer => getPSDToolInfo(layer.name).name).join('/')
 
-    const visible = data[currentPath] === true || info.tags.has('fixed') || info.tags.has('option') || node === psd
+    // if not false, visible
+    // if fixed, visible
+    // if option, that means node is queued, thus visible
+    // if top level, visible
+    const visible = data[currentPath] !== false || info.tags.has('fixed') || info.tags.has('option') || node === psd
+
+    // do nothing if not visible
     if (!visible) {
       continue
     }
@@ -169,6 +176,7 @@ export function renderPsd(psd: Psd, data: Record<string, any>, options?: RenderO
     // add children to queue
     if (node.children?.length) {
       const sameNameCount = countBy(node.children, child => getPSDToolInfo(child.name).name)
+      // children has multiple variants (:flipx, :flipy, :flipxy, etc.)
       const duplicated = new Set(Object.entries(sameNameCount).filter(([_, count]) => count > 1).map(([name]) => name))
       queue.unshift(...node.children
         .map(child => ({ child, info: getPSDToolInfo(child.name) }))
@@ -177,6 +185,7 @@ export function renderPsd(psd: Psd, data: Record<string, any>, options?: RenderO
         .map(s => s.child),
       )
     }
+    // add to visible layers
     else {
       visibleLayers.push(node)
     }
@@ -215,6 +224,7 @@ export function getSchema(psd: Psd): Record<string, any> {
   while (queue.length) {
     const node = queue.pop()
     if (!node) {
+      /* v8 ignore next 2 */
       throw new Error('AssertionError: node is null')
     }
 
