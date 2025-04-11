@@ -35,7 +35,7 @@ import { readPsd } from 'ag-psd'
 import { getSchema, renderPsd } from 'ag-psd-psdtool'
 
 // Fetch a PSD file
-const url = 'https://raw.githubusercontent.com/34j/ag-psd-psdtool/refs/heads/feat/add-main-feat/test/assets/ccchu.psd'
+const url = 'https://raw.githubusercontent.com/34j/ag-psd-psdtool/refs/heads/main/test/assets/ccchu.psd'
 const request = await fetch(url)
 const psd = await request.arrayBuffer()
 
@@ -44,7 +44,53 @@ const schema = getSchema(psd)
 console.log(schema)
 
 // 2 . Change the visible states
-const canvas = renderPsd(psd, {}, { flipx: true })
+const canvas = renderPsd(psd, { mouth: 'normal' }, { flipx: true })
+```
+
+Generated canvas:
+
+![canvas](https://raw.githubusercontent.com/34j/ag-psd-psdtool/refs/heads/main/test/generated/ccchu-gen-0-true-false.png)
+
+Schema:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "logo": {
+      "type": [
+        "string",
+        "boolean"
+      ],
+      "enum": [
+        "logo",
+        false
+      ],
+      "default": "logo"
+    },
+    "nose": {
+      "type": "boolean",
+      "default": false
+    },
+    "mouth": {
+      "type": "string",
+      "enum": [
+        "normal",
+        "dot"
+      ],
+      "default": "normal"
+    },
+    "right_eye": {
+      "type": "string",
+      "enum": [
+        "normal",
+        "wink",
+        "horizontal"
+      ],
+      "default": "normal"
+    }
+  }
+}
 ```
 
 [build-img]:https://github.com/34j/ag-psd-psdtool/actions/workflows/release.yml/badge.svg

@@ -23,8 +23,8 @@ describe('index', async () => {
           if (isNode) {
             const { writeFile, mkdir } = (await import('node:fs')).promises
             const Buffer = (await import('node:buffer')).Buffer
-            await mkdir('test/.cache', { recursive: true })
-            await writeFile(`test/.cache/ccchu-gen-${i}-${flipx}-${flipy}.png`, Buffer.from(canvas.toDataURL().split(',')[1], 'base64'))
+            await mkdir('test/generated', { recursive: true })
+            await writeFile(`test/generated/ccchu-gen-${i}-${flipx}-${flipy}.png`, Buffer.from(canvas.toDataURL().split(',')[1], 'base64'))
           }
         })
       })
