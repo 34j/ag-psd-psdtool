@@ -13,7 +13,7 @@ describe('index', async () => {
   const psd = readPsd(buffer)
   describe.for([false, true])('flipy: %s', (flipy) => {
     describe.for([false, true])('flipx: %s', (flipx) => {
-      describe.for([{}, { right_eye: 'wink' }, { logo: false }, { logo: 'hello' }].entries().toArray())('data: %s', ([i, data]) => {
+      describe.for([{}, { right_eye: 'wink' }, { logo: false }, { logo: 'hello' }].map((data, i) => ({ data, i })))('data: %s', ({ data, i }) => {
         it('should be able to write files', async () => {
           if (i === 3) {
             expect(() => renderPsd(psd, data, { flipx, flipy })).toThrowError()
