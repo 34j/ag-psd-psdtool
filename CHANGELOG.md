@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/34j/ag-psd-psdtool/compare/v1.1.0...v1.1.1) (2025-04-11)
+
+
+### Bug Fixes
+
+* trigger release ([454c6f5](https://github.com/34j/ag-psd-psdtool/commit/454c6f56e09d431cfdf1866c7069ffa735482a64))
+
 # [1.1.0](https://github.com/34j/ag-psd-psdtool/compare/v1.0.0...v1.1.0) (2025-04-11)
 
 
