@@ -146,8 +146,8 @@ export function renderPsd(psd: Psd, data: Record<string, any>, options?: RenderO
   // layer.children are ordered from background to foreground
   while (queue.length) {
     const node = queue.shift()
+    /* v8 ignore next 3 */
     if (!node) {
-      /* v8 ignore next 2 */
       throw new Error('AssertionError: node is null')
     }
 
@@ -223,8 +223,8 @@ export function getSchema(psd: Psd): Record<string, any> {
   const ancestors: Layer[] = []
   while (queue.length) {
     const node = queue.pop()
+    /* v8 ignore next 3 */
     if (!node) {
-      /* v8 ignore next 2 */
       throw new Error('AssertionError: node is null')
     }
 
