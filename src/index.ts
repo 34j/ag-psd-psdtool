@@ -133,7 +133,12 @@ export function renderPsd(psd: Psd, data: Record<string, any>, options?: RenderO
   const validate = ajv.compile(schema)
   const valid = validate(data)
   if (!valid) {
-    throw new Error(`data does not match schema\n${validate.errors}\n${JSON.stringify(data, null, 2)}`)
+    throw new Error(`
+      data does not match schema:
+      errors: ${JSON.stringify(validate.errors, null, 2)}
+      data: ${JSON.stringify(data, null, 2)}
+      schema: ${JSON.stringify(schema, null, 2)}
+    `)
   }
   const queue: Layer[] = [psd]
   const ancestors: Layer[] = []
@@ -225,14 +230,16 @@ export function getSchema(psd: Psd): Record<string, any> {
     const currentPath = ancestors.map(layer => getPSDToolInfo(layer.name).name).join('/')
     // children is option
     // remove :flipx, :flipy, :flipxy
-    const enumOptions = [...new Set(node.children?.map(child => getPSDToolInfo(child.name)).filter(info => info.tags.has('option')).map(info => info.name))]
-    if (enumOptions.length) {
+    const enumOptions: (string | boolean)[] = [...new Set(node.children?.map(child => getPSDToolInfo(child.name)).filter(info => info.tags.has('option')).map(info => info.name))]
+    if (enumOptions.length > 0) {
+      if (!info.tags.has('fixed')) {
+        enumOptions.push(false)
+      }
       schema.properties[currentPath] = {
-        type: 'string',
+        type: info.tags.has('fixed') ? 'string' : ['string', 'boolean'],
         enum: enumOptions,
         // set first visible child as default
         default: node.children?.filter(child => child.hidden === false).map(child => getPSDToolInfo(child.name).name).at(0),
-        nullable: !info.tags.has('fixed'),
       }
     }
     // top level

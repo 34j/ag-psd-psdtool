@@ -11,15 +11,16 @@ describe('index', async () => {
     require('ag-psd/initialize-canvas')
   }
   const psd = readPsd(buffer)
-  describe.for([{}, { right_eye: 'wink' }, { logo: null }])('data: %s', (data) => {
+  describe.for([{}, { right_eye: 'wink' }, { logo: false }].entries().toArray())('data: %s', ([i, data]) => {
     describe.for([false, true])('flipy: %s', (flipy) => {
       describe.for([false, true])('flipx: %s', (flipx) => {
         it('should be able to write files', async () => {
           const canvas = renderPsd(psd, data, { flipx, flipy })
           if (isNode) {
-            const { writeFile } = (await import('node:fs')).promises
+            const { writeFile, mkdir } = (await import('node:fs')).promises
             const Buffer = (await import('node:buffer')).Buffer
-            await writeFile('test/assets/ccchuGen.png', Buffer.from(canvas.toDataURL().split(',')[1], 'base64'))
+            await mkdir('test/.cache', { recursive: true })
+            await writeFile(`test/.cache/ccchu-gen-${i}-${flipx}-${flipy}.png`, Buffer.from(canvas.toDataURL().split(',')[1], 'base64'))
           }
         })
       })
