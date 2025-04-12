@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/34j/ag-psd-psdtool/compare/v1.1.1...v1.1.2) (2025-04-12)
+
+
+### Bug Fixes
+
+* apply latest template ([6409f5f](https://github.com/34j/ag-psd-psdtool/commit/6409f5f1cfb9c819aaa37d5bbe9d73501ad7db3d))
+
 ## [1.1.1](https://github.com/34j/ag-psd-psdtool/compare/v1.1.0...v1.1.1) (2025-04-11)
 
 
