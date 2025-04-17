@@ -64,7 +64,7 @@
     "globals": "16.0.0",
     "http-server": "14.1.1",
     "npm-run-all2": "7.0.2",
-    "playwright": "1.51.1",
+    "playwright": "1.52.0",
     "semantic-release": "24.2.3",
     "typedoc": "0.28.1",
     "typescript": "5.8.2",
