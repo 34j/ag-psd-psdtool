@@ -49,8 +49,8 @@ importers:
         specifier: 3.0.0
         version: 3.0.0
       canvas:
-        specifier: 3.1.2
-        version: 3.1.2
+        specifier: 3.2.0
+        version: 3.2.0
       eslint:
         specifier: 9.33.0
         version: 9.33.0
@@ -1208,8 +1208,8 @@ packages:
   caniuse-lite@1.0.30001711:
     resolution: {integrity: sha512-OpFA8GsKtoV3lCcsI3U5XBAV+oVrMu96OS8XafKqnhOaEAW2mveD1Mx81Sx/02chERwhDakuXs28zbyEc4QMKg==}
 
-  canvas@3.1.2:
-    resolution: {integrity: sha512-Z/tzFAcBzoCvJlOSlCnoekh1Gu8YMn0J51+UAuXJAbW1Z6I9l2mZgdD7738MepoeeIcUdDtbMnOg6cC7GJxy/g==}
+  canvas@3.2.0:
+    resolution: {integrity: sha512-jk0GxrLtUEmW/TmFsk2WghvgHe8B0pxGilqCL21y8lHkPUGa6FTsnCNtHPOzT8O3y+N+m3espawV80bbBlgfTA==}
     engines: {node: ^18.12.0 || >= 20.9.0}
 
   ccount@2.0.1:
@@ -4838,7 +4838,7 @@ snapshots:
 
   caniuse-lite@1.0.30001711: {}
 
-  canvas@3.1.2:
+  canvas@3.2.0:
     dependencies:
       node-addon-api: 7.1.1
       prebuild-install: 7.1.3
