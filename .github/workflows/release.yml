@@ -6,6 +6,10 @@ on:
       - main
   pull_request:
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   # Make sure commit messages follow the conventional commits convention:
   # https://www.conventionalcommits.org
@@ -135,7 +139,6 @@ jobs:
       - name: Release
         uses: cycjimmy/semantic-release-action@v4
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           dry_run: ${{ github.ref_name != 'main' }}
