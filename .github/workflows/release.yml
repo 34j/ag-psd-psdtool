@@ -7,7 +7,6 @@ on:
   pull_request:
 
 permissions:
-  id-token: write
   contents: read
 
 jobs:
@@ -137,11 +136,15 @@ jobs:
       - name: Docs
         run: pnpm typedoc
       - name: Release
-        uses: cycjimmy/semantic-release-action@v4
+        if: github.ref_name == 'main'
+        run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          dry_run: ${{ github.ref_name != 'main' }}
+      - name: Release (Dry Run)
+        if: github.ref_name != 'main'
+        run: npx semantic-release --dry-run
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload Documentation
         uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
         with:
