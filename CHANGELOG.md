@@ -1,3 +1,11 @@
+## [1.1.3](https://github.com/34j/ag-psd-psdtool/compare/v1.1.2...v1.1.3) (2025-10-24)
+
+
+### Bug Fixes
+
+* trusted publisher ([3305148](https://github.com/34j/ag-psd-psdtool/commit/330514813eb8e7acf86aa29b0bf82ac9a9f83f58))
+* trusted publisher ([026fcfc](https://github.com/34j/ag-psd-psdtool/commit/026fcfc66d5123639e30985004105b73a0940789))
+
 ## [1.1.2](https://github.com/34j/ag-psd-psdtool/compare/v1.1.1...v1.1.2) (2025-04-12)
 
 
