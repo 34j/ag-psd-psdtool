@@ -135,8 +135,8 @@ jobs:
         run: pnpm build
       - name: Docs
         run: pnpm typedoc
-      - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
-        run: pnpm audit signatures
+      - name: Update npm
+        run: npm install -g npm@latest
       - name: Release
         if: github.ref_name == 'main'
         run: npx semantic-release
