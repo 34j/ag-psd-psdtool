@@ -1,0 +1,8 @@
+# Changes here will be overwritten by Copier
+_commit: v1.5.1-187-g9235207
+_src_path: gh:34j/create-minimal-package
+create_minimal_package_installation_ids: '62553233'
+github_user: 34j
+project_name: ag-psd-psdtool
+setup_github: false
+setup_npm: false
