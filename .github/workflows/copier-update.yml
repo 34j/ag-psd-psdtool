@@ -3,7 +3,7 @@ name: Copier Update
 on:
   workflow_dispatch:
   schedule:
-    - cron: '3 19 * * *'
+    - cron: '3 16 * * *'
 
 jobs:
   upgrade:
@@ -21,7 +21,7 @@ jobs:
         run: uvx copier update --trust --vcs-ref main --exclude src --exclude test --exclude package.json --defaults
       - id: copier-recopy
         if: ${{ failure() && steps.copier-update.conclusion == 'failure' }}
-        run: uvx copier recopy --trust --vcs-ref main --exclude src --exclude test --exclude package.json --defaults
+        run: uvx copier recopy --trust --vcs-ref main --exclude src --exclude test --exclude package.json --defaults --overwrite
       - uses: peter-evans/create-pull-request@v7
         if: ${{ steps.copier-update.conclusion == 'success' }}
         with:
