@@ -61,7 +61,7 @@
     "browser-or-node": "3.0.0",
     "canvas": "3.2.0",
     "eslint": "9.39.2",
-    "globals": "16.5.0",
+    "globals": "17.0.0",
     "http-server": "14.1.1",
     "npm-run-all2": "8.0.4",
     "playwright": "1.57.0",
