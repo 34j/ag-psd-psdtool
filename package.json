@@ -44,7 +44,7 @@
     "update": "npm-check-updates -u"
   },
   "dependencies": {
-    "ag-psd": "^29.0.0",
+    "ag-psd": "^30.0.0",
     "ajv": "^8.17.1",
     "es-toolkit": "^1.34.1"
   },
