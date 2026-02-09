@@ -41,7 +41,7 @@ importers:
         version: 8.54.0(@typescript-eslint/parser@8.37.0(eslint@9.39.2)(typescript@5.9.3))(eslint@9.39.2)(typescript@5.9.3)
       '@vitest/browser':
         specifier: 3.2.4
-        version: 3.2.4(msw@2.7.3(@types/node@24.10.11)(typescript@5.9.3))(playwright@1.58.1)(vite@6.2.5(@types/node@24.10.11)(yaml@2.8.1))(vitest@3.2.4)
+        version: 3.2.4(msw@2.7.3(@types/node@24.10.11)(typescript@5.9.3))(playwright@1.58.2)(vite@6.2.5(@types/node@24.10.11)(yaml@2.8.1))(vitest@3.2.4)
       '@vitest/coverage-v8':
         specifier: 3.2.4
         version: 3.2.4(@vitest/browser@3.2.4)(vitest@3.2.4)
@@ -64,8 +64,8 @@ importers:
         specifier: 8.0.4
         version: 8.0.4
       playwright:
-        specifier: 1.58.1
-        version: 1.58.1
+        specifier: 1.58.2
+        version: 1.58.2
       semantic-release:
         specifier: 25.0.3
         version: 25.0.3(typescript@5.9.3)
@@ -2937,13 +2937,13 @@ packages:
   pkg-types@2.1.0:
     resolution: {integrity: sha512-wmJwA+8ihJixSoHKxZJRBQG1oY8Yr9pGLzRmSsNms0iNWyHHAlZCa7mmKiFR10YPZuz/2k169JiS/inOjBCZ2A==}
 
-  playwright-core@1.58.1:
-    resolution: {integrity: sha512-bcWzOaTxcW+VOOGBCQgnaKToLJ65d6AqfLVKEWvexyS3AS6rbXl+xdpYRMGSRBClPvyj44njOWoxjNdL/H9UNg==}
+  playwright-core@1.58.2:
+    resolution: {integrity: sha512-yZkEtftgwS8CsfYo7nm0KE8jsvm6i/PTgVtB8DL726wNf6H2IMsDuxCpJj59KDaxCtSnrWan2AeDqM7JBaultg==}
     engines: {node: '>=18'}
     hasBin: true
 
-  playwright@1.58.1:
-    resolution: {integrity: sha512-+2uTZHxSCcxjvGc5C891LrS1/NlxglGxzrC4seZiVjcYVQfUa87wBL6rTDqzGjuoWNjnBzRqKmF6zRYGMvQUaQ==}
+  playwright@1.58.2:
+    resolution: {integrity: sha512-vA30H8Nvkq/cPBnNw4Q8TWz1EJyqgpuinBcHET0YVJVFldr8JDNiU9LaWAE1KqSkRYazuaBhTpB5ZzShOezQ6A==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -4700,7 +4700,7 @@ snapshots:
       '@typescript-eslint/types': 8.54.0
       eslint-visitor-keys: 4.2.1
 
-  '@vitest/browser@3.2.4(msw@2.7.3(@types/node@24.10.11)(typescript@5.9.3))(playwright@1.58.1)(vite@6.2.5(@types/node@24.10.11)(yaml@2.8.1))(vitest@3.2.4)':
+  '@vitest/browser@3.2.4(msw@2.7.3(@types/node@24.10.11)(typescript@5.9.3))(playwright@1.58.2)(vite@6.2.5(@types/node@24.10.11)(yaml@2.8.1))(vitest@3.2.4)':
     dependencies:
       '@testing-library/dom': 10.4.0
       '@testing-library/user-event': 14.6.1(@testing-library/dom@10.4.0)
@@ -4712,7 +4712,7 @@ snapshots:
       vitest: 3.2.4(@types/debug@4.1.12)(@types/node@24.10.11)(@vitest/browser@3.2.4)(msw@2.7.3(@types/node@24.10.11)(typescript@5.9.3))(yaml@2.8.1)
       ws: 8.18.2
     optionalDependencies:
-      playwright: 1.58.1
+      playwright: 1.58.2
     transitivePeerDependencies:
       - bufferutil
       - msw
@@ -4736,7 +4736,7 @@ snapshots:
       tinyrainbow: 2.0.0
       vitest: 3.2.4(@types/debug@4.1.12)(@types/node@24.10.11)(@vitest/browser@3.2.4)(msw@2.7.3(@types/node@24.10.11)(typescript@5.9.3))(yaml@2.8.1)
     optionalDependencies:
-      '@vitest/browser': 3.2.4(msw@2.7.3(@types/node@24.10.11)(typescript@5.9.3))(playwright@1.58.1)(vite@6.2.5(@types/node@24.10.11)(yaml@2.8.1))(vitest@3.2.4)
+      '@vitest/browser': 3.2.4(msw@2.7.3(@types/node@24.10.11)(typescript@5.9.3))(playwright@1.58.2)(vite@6.2.5(@types/node@24.10.11)(yaml@2.8.1))(vitest@3.2.4)
     transitivePeerDependencies:
       - supports-color
 
@@ -6777,11 +6777,11 @@ snapshots:
       exsolve: 1.0.4
       pathe: 2.0.3
 
-  playwright-core@1.58.1: {}
+  playwright-core@1.58.2: {}
 
-  playwright@1.58.1:
+  playwright@1.58.2:
     dependencies:
-      playwright-core: 1.58.1
+      playwright-core: 1.58.2
     optionalDependencies:
       fsevents: 2.3.2
 
@@ -7503,7 +7503,7 @@ snapshots:
     optionalDependencies:
       '@types/debug': 4.1.12
       '@types/node': 24.10.11
-      '@vitest/browser': 3.2.4(msw@2.7.3(@types/node@24.10.11)(typescript@5.9.3))(playwright@1.58.1)(vite@6.2.5(@types/node@24.10.11)(yaml@2.8.1))(vitest@3.2.4)
+      '@vitest/browser': 3.2.4(msw@2.7.3(@types/node@24.10.11)(typescript@5.9.3))(playwright@1.58.2)(vite@6.2.5(@types/node@24.10.11)(yaml@2.8.1))(vitest@3.2.4)
     transitivePeerDependencies:
       - jiti
       - less
