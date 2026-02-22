@@ -26,7 +26,11 @@ jobs:
       - name: Run copier update
         run: uvx copier@latest update --trust --vcs-ref main --exclude src --exclude test --exclude package.json --defaults
       - name: Apply incoming changes
-        run: git merge --strategy-option theirs --no-edit
+        run: |
+          git diff --name-only --diff-filter=U -z | while IFS= read -r -d '' file; do
+            git checkout --theirs -- "$file"
+          done
+          git add -A
       - name: Delete remote branch
         run: git push origin --delete chore/copier-auto-update || true
       - uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8
