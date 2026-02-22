@@ -37,7 +37,8 @@ jobs:
       - uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8
         with:
           branch: chore/copier-auto-update-${{ matrix['update-package-json'] && 'with-package-json' || 'without-package-json' }}
-          title: 'chore(deps): run `copier update`'
+          title: |
+            chore(deps): run `copier update` ${{ matrix['update-package-json'] && 'with package.json' || 'without package.json' }}
           commit-message: 'chore(deps): run `copier update`'
           token: ${{ secrets.GH_PAT }}
 
@@ -61,6 +62,7 @@ jobs:
       - uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8
         with:
           branch: chore/copier-auto-recopy-${{ matrix['update-package-json'] && 'with-package-json' || 'without-package-json' }}
-          title: 'chore(deps): run `copier recopy`'
+          title: |
+            chore(deps): run `copier recopy` ${{ matrix['update-package-json'] && 'with package.json' || 'without package.json' }}
           commit-message: 'chore(deps): run `copier recopy`'
           token: ${{ secrets.GH_PAT }}
