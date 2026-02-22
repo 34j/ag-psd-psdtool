@@ -27,7 +27,7 @@ jobs:
           python-version: '3.14'
       - uses: astral-sh/setup-uv@eac588ad8def6316056a12d4907a9d4d84ff7a3b # v7
       - name: Run copier update
-        run: uvx copier@latest update --trust --vcs-ref main --exclude src --exclude test ${{ matrix['update-package-json'] && '' || '--exclude package.json' }} --defaults || true
+        run: uvx copier@latest update --trust --vcs-ref main --exclude src --exclude test $([ "${{ matrix['update-package-json'] }}" = "true" ] || echo "--exclude package.json") --defaults || true
       - name: Apply incoming changes
         run: |
           git diff --name-only --diff-filter=U -z | while IFS= read -r -d '' file; do
@@ -58,7 +58,7 @@ jobs:
           python-version: '3.14'
       - uses: astral-sh/setup-uv@eac588ad8def6316056a12d4907a9d4d84ff7a3b # v7
       - name: Run copier recopy
-        run: uvx copier@latest recopy --trust --vcs-ref main --exclude src --exclude test ${{ matrix['update-package-json'] && '' || '--exclude package.json' }} --defaults --overwrite || true
+        run: uvx copier@latest recopy --trust --vcs-ref main --exclude src --exclude test $([ "${{ matrix['update-package-json'] }}" = "true" ] || echo "--exclude package.json") --defaults --overwrite || true
       - uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8
         with:
           branch: chore/copier-auto-recopy-${{ matrix['update-package-json'] && 'with-package-json' || 'without-package-json' }}
