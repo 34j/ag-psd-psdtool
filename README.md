@@ -1,4 +1,3 @@
-
 # ag-psd-psdtool
 
 [![npm package][npm-img]][npm-url]
