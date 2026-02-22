@@ -24,7 +24,11 @@ jobs:
           python-version: '3.14'
       - uses: astral-sh/setup-uv@eac588ad8def6316056a12d4907a9d4d84ff7a3b # v7
       - name: Run copier update
+<<<<<<< before updating
         run: uvx copier@latest update --trust --vcs-ref main --exclude src --exclude test --exclude package.json --defaults
+=======
+        run: uvx --upgrade copier update --trust --vcs-ref main --exclude src --exclude test --exclude package.json --defaults
+>>>>>>> after updating
       - name: Add changes
         run: git add -A
       - name: Delete remote branch
@@ -49,7 +53,11 @@ jobs:
           python-version: '3.14'
       - uses: astral-sh/setup-uv@eac588ad8def6316056a12d4907a9d4d84ff7a3b # v7
       - name: Run copier recopy
+<<<<<<< before updating
         run: uvx copier@latest recopy --trust --vcs-ref main --exclude src --exclude test --exclude package.json --defaults --overwrite
+=======
+        run: uvx --upgrade copier recopy --trust --vcs-ref main --exclude src --exclude test --exclude package.json --defaults --overwrite
+>>>>>>> after updating
       - name: Delete remote branch
         run: git push origin --delete chore/copier-auto-recopy || true
       - uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8

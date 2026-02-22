@@ -29,8 +29,14 @@ jobs:
       - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
         with:
           run_install: false
+<<<<<<< before updating
           version: 10
       - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+=======
+          version: latest
+      - id: setup-node
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+>>>>>>> after updating
         with:
           node-version: lts/*
       - id: pnpm-cache-path
@@ -53,14 +59,20 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [18, 20, 22]
+        node-version: [lts/-1, lts/*]
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
         with:
           run_install: false
+<<<<<<< before updating
           version: 10
       - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+=======
+          version: latest
+      - id: setup-node
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+>>>>>>> after updating
         with:
           node-version: ${{ matrix.node-version }}
       - id: pnpm-cache-path
@@ -115,8 +127,14 @@ jobs:
       - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
         with:
           run_install: false
+<<<<<<< before updating
           version: 10
       - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+=======
+          version: latest
+      - id: setup-node
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+>>>>>>> after updating
         with:
           node-version: lts/*
       - id: pnpm-cache-path
@@ -135,16 +153,14 @@ jobs:
         run: pnpm build
       - name: Docs
         run: pnpm typedoc
-      - name: Update npm
-        run: npm install -g npm@latest
       - name: Release
         if: github.ref_name == 'main'
-        run: npx semantic-release
+        run: npx --package=semantic-release --package=@semantic-release/git --package=@semantic-release/changelog semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Release (Dry Run)
         if: github.ref_name != 'main'
-        run: npx semantic-release --dry-run
+        run: npx --package=semantic-release --package=@semantic-release/git --package=@semantic-release/changelog semantic-release --dry-run
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload Documentation
