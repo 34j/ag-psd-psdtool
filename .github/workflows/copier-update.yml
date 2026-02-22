@@ -1,4 +1,4 @@
-name: Copier
+name: Copier Update
 
 on:
   workflow_dispatch:
@@ -7,7 +7,6 @@ on:
 
 jobs:
   update:
-    name: Update
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -25,10 +24,8 @@ jobs:
           branch: chore/copier-auto-update
           title: 'chore(deps): run `copier update`'
           commit-message: 'chore(deps): run `copier update`'
-          token: ${{ secrets.GH_PAT }}
 
   recopy:
-    name: Recopy
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -46,4 +43,3 @@ jobs:
           branch: chore/copier-auto-recopy
           title: 'chore(deps): run `copier recopy`'
           commit-message: 'chore(deps): run `copier recopy`'
-          token: ${{ secrets.GH_PAT }}
