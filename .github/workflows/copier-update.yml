@@ -25,6 +25,7 @@ jobs:
           branch: chore/copier-auto-update
           title: 'chore(deps): run `copier update`'
           commit-message: 'chore(deps): run `copier update`'
+          token: ${{ secrets.GH_PAT }}
 
   recopy:
     name: Recopy
@@ -45,3 +46,4 @@ jobs:
           branch: chore/copier-auto-recopy
           title: 'chore(deps): run `copier recopy`'
           commit-message: 'chore(deps): run `copier recopy`'
+          token: ${{ secrets.GH_PAT }}
