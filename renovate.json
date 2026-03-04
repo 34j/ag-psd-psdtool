@@ -1,3 +1,15 @@
 {
-  "extends": ["config:best-practices", ":pinOnlyDevDependencies", ":automergeAll"]
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:best-practices",
+    ":automergeAll",
+    ":enablePreCommit",
+    "github>34j/renovate-git-ignored-authors"
+  ],
+  "packageRules": [
+    {
+      "matchDepTypes": ["dependencies"],
+      "rangeStrategy": "bump"
+    }
+  ]
 }
