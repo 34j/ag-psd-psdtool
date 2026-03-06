@@ -1,3 +1,10 @@
+## [1.1.8](https://github.com/34j/ag-psd-psdtool/compare/v1.1.7...v1.1.8) (2026-03-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency ajv to ^8.18.0 ([#292](https://github.com/34j/ag-psd-psdtool/issues/292)) ([4bad6a7](https://github.com/34j/ag-psd-psdtool/commit/4bad6a71c9b8bf4d369beca3ed3e3c8f08690dd1))
+
 ## [1.1.7](https://github.com/34j/ag-psd-psdtool/compare/v1.1.6...v1.1.7) (2026-03-06)
 
 
