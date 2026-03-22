@@ -245,11 +245,34 @@ export function getSchema(psd: Psd): Record<string, any> {
       if (!info.tags.has('fixed')) {
         enumOptions.push(false)
       }
+      // 1. If fixed:
+      // 1.1. Set first visible child layer as default if exists
+      // 1.2. Set first child layer as default
+      // 2. If not fixed:
+      // 2.1. If the layer is invisible, set default to false
+      // 2.2. If no child layer is visible, set default to false
+      // 2.3. Set first visible child layer as default
+      const firstVisibleEnumOption = node.children?.filter(child => !getPSDToolInfo(child.name).tags.has('option') && child.hidden === false).map(child => getPSDToolInfo(child.name).name).at(0)
+      let defaultOption
+      if (info.tags.has('fixed')) {
+        defaultOption = firstVisibleEnumOption || enumOptions[0]
+      }
+      else {
+        if (node.hidden === false) {
+          defaultOption = false
+        }
+        else if (firstVisibleEnumOption === undefined) {
+          defaultOption = false
+        }
+        else {
+          defaultOption = firstVisibleEnumOption
+        }
+      }
       schema.properties[currentPath] = {
         type: info.tags.has('fixed') ? 'string' : ['string', 'boolean'],
         enum: enumOptions,
-        // set first visible child as default
-        default: node.children?.filter(child => child.hidden === false).map(child => getPSDToolInfo(child.name).name).at(0),
+
+        default: defaultOption,
       }
     }
     // top level
