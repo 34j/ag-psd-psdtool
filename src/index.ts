@@ -258,7 +258,7 @@ export function getSchema(psd: Psd): Record<string, any> {
         defaultOption = firstVisibleEnumOption || enumOptions[0]
       }
       else {
-        if (node.hidden === false) {
+        if (node.hidden === true) {
           defaultOption = false
         }
         else if (firstVisibleEnumOption === undefined) {
