@@ -16,7 +16,7 @@ describe('index', async () => {
     if (isNode) {
       const { writeFile, mkdir } = (await import('node:fs')).promises
       await mkdir('test/generated', { recursive: true })
-      await writeFile('test/generated/schema.json', JSON.stringify(schema, null, 2))
+      await writeFile('test/generated/schema.json', `${JSON.stringify(schema, null, 2)}\n`)
     }
   })
   describe.for([false, true])('flipy: %s', (flipy) => {
