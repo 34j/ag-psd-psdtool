@@ -1,3 +1,10 @@
+## [1.1.12](https://github.com/34j/ag-psd-psdtool/compare/v1.1.11...v1.1.12) (2026-03-23)
+
+
+### Bug Fixes
+
+* fix default option ([#317](https://github.com/34j/ag-psd-psdtool/issues/317)) ([2f0b3df](https://github.com/34j/ag-psd-psdtool/commit/2f0b3dfde67e27098b7e80951def15e1bf9452b2))
+
 ## [1.1.11](https://github.com/34j/ag-psd-psdtool/compare/v1.1.10...v1.1.11) (2026-03-22)
 
 
