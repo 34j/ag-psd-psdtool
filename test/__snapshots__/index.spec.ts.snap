@@ -1,12 +1,88 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`index > should be able to export schema 1`] = `
-Canvas {
-  "_context2d": CanvasRenderingContext2D {
-    "canvas": [Circular],
+{
+  "properties": {
+    "dummy": {
+      "$path": [
+        "dummy",
+      ],
+      "default": false,
+      "enum": [
+        "dummy",
+        false,
+      ],
+      "type": [
+        "string",
+        "boolean",
+      ],
+    },
+    "dummy/dummy": {
+      "$path": [
+        "dummy",
+        "dummy",
+      ],
+      "default": "dummy",
+      "enum": [
+        "dummy",
+      ],
+      "type": "string",
+    },
+    "dummy/dummy/dummy": {
+      "$path": [
+        "dummy",
+        "dummy",
+        "dummy",
+      ],
+      "default": true,
+      "type": "boolean",
+    },
+    "logo": {
+      "$path": [
+        "logo",
+      ],
+      "default": "logo",
+      "enum": [
+        "logo",
+        false,
+      ],
+      "type": [
+        "string",
+        "boolean",
+      ],
+    },
+    "mouth": {
+      "$path": [
+        "mouth",
+      ],
+      "default": "normal",
+      "enum": [
+        "normal",
+        "dot",
+      ],
+      "type": "string",
+    },
+    "nose": {
+      "$path": [
+        "nose",
+      ],
+      "default": false,
+      "type": "boolean",
+    },
+    "right_eye": {
+      "$path": [
+        "right_eye",
+      ],
+      "default": "normal",
+      "enum": [
+        "normal",
+        "wink",
+        "horizontal",
+      ],
+      "type": "string",
+    },
   },
-  "context": CanvasRenderingContext2D {
-    "canvas": [Circular],
-  },
+  "title": undefined,
+  "type": "object",
 }
 `;

@@ -13,11 +13,7 @@ describe('index', async () => {
   const psd = readPsd(buffer)
   it('should be able to export schema', async () => {
     const schema = getSchema(psd)
-    if (isNode) {
-      const { writeFile, mkdir } = (await import('node:fs')).promises
-      await mkdir('test/generated', { recursive: true })
-      await writeFile('test/generated/schema.json', `${JSON.stringify(schema, null, 2)}\n`)
-    }
+    expect(schema).toMatchSnapshot()
   })
   describe.for([false, true])('flipy: %s', (flipy) => {
     describe.for([false, true])('flipx: %s', (flipx) => {
