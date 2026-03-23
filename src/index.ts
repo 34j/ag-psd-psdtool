@@ -93,6 +93,28 @@ function tagMatchesFlip(tags: Set<Tag>, flipx: boolean, flipy: boolean): boolean
   return false
 }
 
+export type PSDToolJSONSchemaProperty = {
+  type: 'boolean'
+  default: boolean
+  $path: string[]
+} | {
+  type: 'string'
+  enum: string[]
+  default: string
+  $path: string[]
+} | {
+  type: ['string', 'boolean']
+  enum: (string | boolean)[]
+  default: string | boolean
+  $path: string[]
+}
+
+export interface PSDToolJSONSchema {
+  type: 'object'
+  title: string | undefined
+  properties: Record<string, PSDToolJSONSchemaProperty>
+}
+
 /**
  * The options for rendering a PSD file.
  */
@@ -108,7 +130,7 @@ export interface RenderOptions {
   /**
    * The schema to use for validation.
    */
-  schema?: any
+  schema?: PSDToolJSONSchema
   /**
    * The canvas to use for rendering.
    * If not provided, psd.canvas will be used.
@@ -124,13 +146,13 @@ export interface RenderOptions {
  * @returns The rendered canvas.
  * @throws {Error} If the data does not match the schema.
  */
-export function renderPsd(psd: Psd, data: Record<string, any>, options?: RenderOptions): any {
+export function renderPsd(psd: Psd, data: Record<string, string | boolean>, options?: RenderOptions): any {
   const flipx = options?.flipx || false
   const flipy = options?.flipy || false
   const schema = options?.schema || getSchema(psd)
   const canvas = options?.canvas || psd.canvas
   const ajv = new Ajv({ useDefaults: true, removeAdditional: true, allowUnionTypes: true })
-  ajv.addKeyword('$ancestors')
+  ajv.addKeyword('$path')
   const validate = ajv.compile(schema)
   const valid = validate(data)
   if (!valid) {
@@ -214,8 +236,8 @@ export function renderPsd(psd: Psd, data: Record<string, any>, options?: RenderO
  * @param psd The PSD file to get the schema for.
  * @returns The schema for the PSD file.
  */
-export function getSchema(psd: Psd): Record<string, any> {
-  const schema: any = {
+export function getSchema(psd: Psd): PSDToolJSONSchema {
+  const schema: PSDToolJSONSchema = {
     type: 'object',
     title: psd.name,
     properties: {},
@@ -241,11 +263,8 @@ export function getSchema(psd: Psd): Record<string, any> {
     const currentPath = ancestors.map(layer => getPSDToolInfo(layer.name).name).join('/')
     // children is option
     // remove :flipx, :flipy, :flipxy
-    const enumOptions: (string | boolean)[] = [...new Set(node.children?.map(child => getPSDToolInfo(child.name)).filter(info => info.tags.has('option')).map(info => info.name))]
-    if (enumOptions.length > 0) {
-      if (!info.tags.has('fixed')) {
-        enumOptions.push(false)
-      }
+    const enumOptions: string[] = [...new Set(node.children?.map(child => getPSDToolInfo(child.name)).filter(info => info.tags.has('option')).map(info => info.name))]
+    if (enumOptions.length > 0 && enumOptions[0] !== undefined) {
       // 1. If fixed:
       // 1.1. Set first visible child layer as default if exists
       // 1.2. Set first child layer as default
@@ -254,11 +273,16 @@ export function getSchema(psd: Psd): Record<string, any> {
       // 2.2. If no child layer is visible, set default to false
       // 2.3. Set first visible child layer as default
       const firstVisibleEnumOption = node.children?.filter(child => getPSDToolInfo(child.name).tags.has('option') && child.hidden === false).map(child => getPSDToolInfo(child.name).name).at(0)
-      let defaultOption
       if (info.tags.has('fixed')) {
-        defaultOption = firstVisibleEnumOption || enumOptions[0]
+        schema.properties[currentPath] = {
+          type: 'string',
+          enum: enumOptions,
+          default: firstVisibleEnumOption || enumOptions[0],
+          $path: ancestors.map(layer => getPSDToolInfo(layer.name).name),
+        }
       }
       else {
+        let defaultOption: string | boolean
         if (node.hidden === true) {
           defaultOption = false
         }
@@ -268,12 +292,12 @@ export function getSchema(psd: Psd): Record<string, any> {
         else {
           defaultOption = firstVisibleEnumOption
         }
-      }
-      schema.properties[currentPath] = {
-        type: info.tags.has('fixed') ? 'string' : ['string', 'boolean'],
-        enum: enumOptions,
-        default: defaultOption,
-        $ancestors: ancestors.map(layer => getPSDToolInfo(layer.name).name),
+        schema.properties[currentPath] = {
+          type: ['string', 'boolean'],
+          enum: [...enumOptions, false],
+          default: defaultOption,
+          $path: ancestors.map(layer => getPSDToolInfo(layer.name).name),
+        }
       }
     }
     // top level
@@ -293,7 +317,7 @@ export function getSchema(psd: Psd): Record<string, any> {
       schema.properties[currentPath] = {
         type: 'boolean',
         default: node.hidden === false,
-        $ancestors: ancestors.map(layer => getPSDToolInfo(layer.name).name),
+        $path: ancestors.map(layer => getPSDToolInfo(layer.name).name),
       }
     }
 
