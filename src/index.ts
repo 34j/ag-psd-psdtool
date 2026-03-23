@@ -5,12 +5,12 @@ import type { Layer, Psd } from 'ag-psd'
 import Ajv from 'ajv'
 import { countBy } from 'es-toolkit'
 
-type Tag = 'fixed' | 'option' | 'filpx' | 'filpy' | 'filpxy'
+export type Tag = 'fixed' | 'option' | 'filpx' | 'filpy' | 'filpxy'
 
 /**
  * The PSDTool extension info which can be generated from the layer name.
  */
-interface PSDToolInfo {
+export interface PSDToolInfo {
   /**
    * The tags of the layer.
    * !: fixed
