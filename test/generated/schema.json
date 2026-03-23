@@ -10,11 +10,17 @@
         "logo",
         false
       ],
-      "default": "logo"
+      "default": "logo",
+      "$ancestors": [
+        "logo"
+      ]
     },
     "nose": {
       "type": "boolean",
-      "default": false
+      "default": false,
+      "$ancestors": [
+        "nose"
+      ]
     },
     "dummy": {
       "type": [
@@ -25,18 +31,30 @@
         "dummy",
         false
       ],
-      "default": false
+      "default": false,
+      "$ancestors": [
+        "dummy"
+      ]
     },
     "dummy/dummy": {
       "type": "string",
       "enum": [
         "dummy"
       ],
-      "default": "dummy"
+      "default": "dummy",
+      "$ancestors": [
+        "dummy",
+        "dummy"
+      ]
     },
     "dummy/dummy/dummy": {
       "type": "boolean",
-      "default": true
+      "default": true,
+      "$ancestors": [
+        "dummy",
+        "dummy",
+        "dummy"
+      ]
     },
     "mouth": {
       "type": "string",
@@ -44,7 +62,10 @@
         "normal",
         "dot"
       ],
-      "default": "normal"
+      "default": "normal",
+      "$ancestors": [
+        "mouth"
+      ]
     },
     "right_eye": {
       "type": "string",
@@ -53,7 +74,10 @@
         "wink",
         "horizontal"
       ],
-      "default": "normal"
+      "default": "normal",
+      "$ancestors": [
+        "right_eye"
+      ]
     }
   }
 }

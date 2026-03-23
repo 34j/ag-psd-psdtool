@@ -130,6 +130,7 @@ export function renderPsd(psd: Psd, data: Record<string, any>, options?: RenderO
   const schema = options?.schema || getSchema(psd)
   const canvas = options?.canvas || psd.canvas
   const ajv = new Ajv({ useDefaults: true, removeAdditional: true, allowUnionTypes: true })
+  ajv.addKeyword('$ancestors')
   const validate = ajv.compile(schema)
   const valid = validate(data)
   if (!valid) {
@@ -272,6 +273,7 @@ export function getSchema(psd: Psd): Record<string, any> {
         type: info.tags.has('fixed') ? 'string' : ['string', 'boolean'],
         enum: enumOptions,
         default: defaultOption,
+        $ancestors: ancestors.map(layer => getPSDToolInfo(layer.name).name),
       }
     }
     // top level
@@ -291,6 +293,7 @@ export function getSchema(psd: Psd): Record<string, any> {
       schema.properties[currentPath] = {
         type: 'boolean',
         default: node.hidden === false,
+        $ancestors: ancestors.map(layer => getPSDToolInfo(layer.name).name),
       }
     }
 
