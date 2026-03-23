@@ -1,7 +1,7 @@
 import { readPsd } from 'ag-psd'
 import { isNode } from 'browser-or-node'
 import { describe, expect, it } from 'vitest'
-import { renderPsd } from '../src/index'
+import { getSchema, renderPsd } from '../src/index'
 
 describe('index', async () => {
   const request = await fetch('http://127.0.0.1:8080/ccchu.psd')
@@ -11,6 +11,14 @@ describe('index', async () => {
     require('ag-psd/initialize-canvas')
   }
   const psd = readPsd(buffer)
+  it('should be able to export schema', async () => {
+    const schema = getSchema(psd)
+    if (isNode) {
+      const { writeFile, mkdir } = (await import('node:fs')).promises
+      await mkdir('test/generated', { recursive: true })
+      await writeFile('test/generated/schema.json', JSON.stringify(schema, null, 2))
+    }
+  })
   describe.for([false, true])('flipy: %s', (flipy) => {
     describe.for([false, true])('flipx: %s', (flipx) => {
       describe.for([{}, { right_eye: 'wink' }, { logo: false }, { logo: 'hello' }].map((data, i) => ({ data, i })))('data: %s', ({ data, i }) => {

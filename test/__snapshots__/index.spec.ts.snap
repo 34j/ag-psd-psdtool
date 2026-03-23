@@ -1,0 +1,12 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`index > should be able to export schema 1`] = `
+Canvas {
+  "_context2d": CanvasRenderingContext2D {
+    "canvas": [Circular],
+  },
+  "context": CanvasRenderingContext2D {
+    "canvas": [Circular],
+  },
+}
+`;

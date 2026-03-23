@@ -1,0 +1,59 @@
+{
+  "type": "object",
+  "properties": {
+    "logo": {
+      "type": [
+        "string",
+        "boolean"
+      ],
+      "enum": [
+        "logo",
+        false
+      ],
+      "default": "logo"
+    },
+    "nose": {
+      "type": "boolean",
+      "default": false
+    },
+    "dummy": {
+      "type": [
+        "string",
+        "boolean"
+      ],
+      "enum": [
+        "dummy",
+        false
+      ],
+      "default": false
+    },
+    "dummy/dummy": {
+      "type": "string",
+      "enum": [
+        "dummy"
+      ],
+      "default": "dummy"
+    },
+    "dummy/dummy/dummy": {
+      "type": "boolean",
+      "default": true
+    },
+    "mouth": {
+      "type": "string",
+      "enum": [
+        "normal",
+        "dot"
+      ],
+      "default": "normal"
+    },
+    "right_eye": {
+      "type": "string",
+      "enum": [
+        "normal",
+        "wink",
+        "horizontal"
+      ],
+      "default": "normal"
+    }
+  }
+}

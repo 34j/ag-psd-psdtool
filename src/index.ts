@@ -146,7 +146,7 @@ export function renderPsd(psd: Psd, data: Record<string, any>, options?: RenderO
   // layer.children are ordered from background to foreground
   while (queue.length) {
     const node = queue.shift()
-    /* v8 ignore next 3 */
+    /* v8 ignore if -- @preserve */
     if (!node) {
       throw new Error('AssertionError: node is null')
     }
@@ -223,7 +223,7 @@ export function getSchema(psd: Psd): Record<string, any> {
   const ancestors: Layer[] = []
   while (queue.length) {
     const node = queue.pop()
-    /* v8 ignore next 3 */
+    /* v8 ignore if -- @preserve */
     if (!node) {
       throw new Error('AssertionError: node is null')
     }
@@ -252,7 +252,7 @@ export function getSchema(psd: Psd): Record<string, any> {
       // 2.1. If the layer is invisible, set default to false
       // 2.2. If no child layer is visible, set default to false
       // 2.3. Set first visible child layer as default
-      const firstVisibleEnumOption = node.children?.filter(child => !getPSDToolInfo(child.name).tags.has('option') && child.hidden === false).map(child => getPSDToolInfo(child.name).name).at(0)
+      const firstVisibleEnumOption = node.children?.filter(child => getPSDToolInfo(child.name).tags.has('option') && child.hidden === false).map(child => getPSDToolInfo(child.name).name).at(0)
       let defaultOption
       if (info.tags.has('fixed')) {
         defaultOption = firstVisibleEnumOption || enumOptions[0]
@@ -271,7 +271,6 @@ export function getSchema(psd: Psd): Record<string, any> {
       schema.properties[currentPath] = {
         type: info.tags.has('fixed') ? 'string' : ['string', 'boolean'],
         enum: enumOptions,
-
         default: defaultOption,
       }
     }
