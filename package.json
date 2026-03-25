@@ -59,7 +59,7 @@
     "@vitest/browser-playwright": "4.1.0",
     "@vitest/coverage-v8": "4.1.0",
     "browser-or-node": "3.0.0",
-    "canvas": "3.2.1",
+    "canvas": "3.2.2",
     "eslint": "10.1.0",
     "globals": "17.4.0",
     "http-server": "14.1.1",
