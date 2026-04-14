@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       ag-psd:
-        specifier: ^30.1.0
+        specifier: ^30.1.1
         version: 30.1.1
       ajv:
         specifier: ^8.18.0
