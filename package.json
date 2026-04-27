@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "ag-psd": "^30.1.1",
-    "ajv": "^8.18.0",
+    "ajv": "^8.20.0",
     "es-toolkit": "^1.46.0"
   },
   "devDependencies": {
