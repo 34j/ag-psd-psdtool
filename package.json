@@ -63,6 +63,7 @@
     "eslint": "10.2.1",
     "globals": "17.5.0",
     "http-server": "14.1.1",
+    "eslint": "10.2.1",
     "npm-run-all2": "8.0.4",
     "playwright": "1.59.1",
     "typedoc": "0.28.19",
