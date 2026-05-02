@@ -1,3 +1,10 @@
+## [1.1.16](https://github.com/34j/ag-psd-psdtool/compare/v1.1.15...v1.1.16) (2026-05-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency es-toolkit to ^1.46.1 ([#368](https://github.com/34j/ag-psd-psdtool/issues/368)) ([baaeb0f](https://github.com/34j/ag-psd-psdtool/commit/baaeb0ff6978edf796b10b0a657bf55c02ba14d5))
+
 ## [1.1.15](https://github.com/34j/ag-psd-psdtool/compare/v1.1.14...v1.1.15) (2026-04-27)
 
 
