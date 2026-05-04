@@ -60,7 +60,7 @@
     "@vitest/coverage-v8": "4.1.5",
     "browser-or-node": "3.0.0",
     "canvas": "3.2.3",
-    "eslint": "10.2.1",
+    "eslint": "10.3.0",
     "globals": "17.5.0",
     "http-server": "14.1.1",
     "npm-run-all2": "8.0.4",
