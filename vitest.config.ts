@@ -21,11 +21,7 @@ export default defineConfig({
             headless: true,
             provider: playwright(),
             instances: [
-              { browser: 'chromium', provider: playwright({ launchOptions: {
-                args: [
-                  '--disable-web-security',
-                ],
-              } }) },
+              { browser: 'chromium' },
               // It is highly recommend to give up firefox and webkit support to use v8 coverage provider, which is considered more stable.
               // { browser: 'firefox' },
               // Current flake.nix does not support webkit.
