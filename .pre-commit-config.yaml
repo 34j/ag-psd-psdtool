@@ -14,6 +14,7 @@ ci:
 repos:
   - repo: https://github.com/commitizen-tools/commitizen
     rev: v4.15.1
+    rev: v4.18.0
     hooks:
       - id: commitizen
         stages: [commit-msg]
@@ -35,6 +36,7 @@ repos:
   # https://stackoverflow.com/questions/77253791/how-to-get-new-style-eslint-config-working-with-pre-commit
   - repo: https://github.com/pre-commit/mirrors-eslint
     rev: v10.3.0
+    rev: v10.10.0
     hooks:
       - id: eslint
         entry: eslint --fix --no-warn-ignored
@@ -46,6 +48,7 @@ repos:
   #     - id: nixfmt
   - repo: https://github.com/codespell-project/codespell
     rev: v2.4.2
+    rev: v2.4.3
     hooks:
       - id: codespell
         exclude: pnpm-lock.yaml
