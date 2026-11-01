@@ -1,3 +1,4 @@
+
 # ag-psd-psdtool
 
 [![npm package][npm-img]][npm-url]
@@ -16,7 +17,7 @@
 
 ---
 
-Export [PSDTool](https://oov.github.io/psdtool/)([kit](https://oov.github.io/aviutl_psdtoolkit/index.html))-compatible PSD files with options (visible states) changed using [ag-psd](https://github.com/Agamnentzar/ag-psd).
+TODO: Project Description.
 
 ## Installation
 
@@ -26,69 +27,11 @@ npm install ag-psd-psdtool
 
 ## Usage
 
-The code below works on both Node.js and browser environments thanks to the `fetch` API.
-
 ```ts
-import { readPsd } from 'ag-psd'
-import { getSchema, renderPsd } from 'ag-psd-psdtool'
+import { myPackage } from 'ag-psd-psdtool'
 
-// Fetch a PSD file
-const url = 'https://raw.githubusercontent.com/34j/ag-psd-psdtool/refs/heads/main/test/assets/ccchu.psd'
-const request = await fetch(url)
-const psd = await request.arrayBuffer()
-
-// 1. Get the schema
-const schema = getSchema(psd)
-console.log(schema)
-
-// 2 . Change the visible states
-const canvas = renderPsd(psd, { mouth: 'normal' }, { flipx: true })
-```
-
-Generated canvas:
-
-![canvas](https://raw.githubusercontent.com/34j/ag-psd-psdtool/refs/heads/main/test/generated/ccchu-gen-0-true-false.png)
-
-Schema:
-
-```json
-{
-  "type": "object",
-  "properties": {
-    "logo": {
-      "type": [
-        "string",
-        "boolean"
-      ],
-      "enum": [
-        "logo",
-        false
-      ],
-      "default": "logo"
-    },
-    "nose": {
-      "type": "boolean",
-      "default": false
-    },
-    "mouth": {
-      "type": "string",
-      "enum": [
-        "normal",
-        "dot"
-      ],
-      "default": "normal"
-    },
-    "right_eye": {
-      "type": "string",
-      "enum": [
-        "normal",
-        "wink",
-        "horizontal"
-      ],
-      "default": "normal"
-    }
-  }
-}
+myPackage('hello')
+// => 'hello from my package'
 ```
 
 [build-img]:https://github.com/34j/ag-psd-psdtool/actions/workflows/release.yml/badge.svg
